@@ -8,7 +8,7 @@
 Shader "Unlit/Emission" {
 Properties {
     _Color ("Main Color", Color) = (1,1,1,1)
-    [HDR] _Emission ("Main Color", Color) = (1,1,1,1)
+    [HDR] _Emission ("Emission", Color) = (1,1,1,1)
 }
 
 SubShader {

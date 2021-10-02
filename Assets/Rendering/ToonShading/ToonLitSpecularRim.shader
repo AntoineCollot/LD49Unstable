@@ -1,6 +1,7 @@
 Shader "Toon/LitSpecularRim" {
 	Properties {
 		_Color ("Main Color", Color) = (0.5,0.5,0.5,1)
+		[HDR] _Emission ("Emission", Color) = (0.5,0.5,0.5,1)
 		_MainTex ("Base (RGB)", 2D) = "white" {}
 		_Ramp ("Toon Ramp (RGB)", 2D) = "gray" {}
 		
@@ -46,6 +47,7 @@ inline half4 LightingToonRamp (SurfaceOutput s, half3 lightDir, half atten)
 
 sampler2D _MainTex;
 float4 _Color;
+float4 _Emission;
 
 //Specular
 half4 _SColor;
@@ -82,7 +84,7 @@ void surf (Input IN, inout SurfaceOutput o) {
 	rim = tex2D(_RimRamp, float2(rim,rim));
 	
 	half4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-	o.Albedo = c.rgb;
+	o.Albedo = c.rgb + _Emission;
 	o.Albedo +=rim * _Rim;
 	o.Albedo +=sCol;
 	o.Alpha = c.a;
