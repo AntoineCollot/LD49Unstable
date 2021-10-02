@@ -13,14 +13,16 @@ public class CharacterPickUp : MonoBehaviour
 
     public Ingredients.IngredientEvent onIngredientPickUp = new Ingredients.IngredientEvent();
 
-
+    Animator anim;
     public static CharacterPickUp Instance;
 
     // Start is called before the first frame update
     void Awake()
     {
         Instance = this;
+        anim = GetComponentInParent<Animator>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -59,6 +61,8 @@ public class CharacterPickUp : MonoBehaviour
             default:
                 break;
         }
+
+        anim.SetTrigger("PickUp");
     }
 
     void CastCollisions()
