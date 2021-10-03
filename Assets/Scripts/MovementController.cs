@@ -15,7 +15,7 @@ public class MovementController : MonoBehaviour
 
     [Header("Grounded")]
     public LayerMask groundLayer = 0;
-    bool isGrounded = false;
+    public bool IsGrounded { get; private set};
 
     [Header("Gravity")]
     public float downwardAccelerationBonus = 1;
@@ -46,7 +46,7 @@ public class MovementController : MonoBehaviour
         Vector2 inputVector = inputs;
 
         //Apply it to the correct axis
-        if (isGrounded)
+        if (IsGrounded)
         {
             targetVelocity.x = moveSpeed * inputVector.x;
             targetVelocity.z = moveSpeed * inputVector.y;
@@ -73,7 +73,7 @@ public class MovementController : MonoBehaviour
     void GroundTest()
     {
         RaycastHit hit;
-        isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.025f, Vector3.down, out hit, 0.05f, groundLayer);
+        IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.025f, Vector3.down, out hit, 0.05f, groundLayer);
     }
 
     void UpdateFacingDirection()

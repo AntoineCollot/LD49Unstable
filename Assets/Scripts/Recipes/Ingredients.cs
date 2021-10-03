@@ -13,5 +13,6 @@ public static class Ingredients
         return (Ingredient)values.GetValue(Random.Range(0, values.Length));
     }
 
+    [System.Serializable]
     public class IngredientEvent : UnityEvent<Ingredient> { }
 }

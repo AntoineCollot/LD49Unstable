@@ -19,6 +19,15 @@ public class DifficultyManager : MonoBehaviour
     public float maxRequestTotalTime = 3;
     public float RequestTotalTime { get => Mathf.Lerp(minRequestTotalTime, maxRequestTotalTime, difficulty01); }
 
+    [Header("Crystals")]
+    public float minCrystalCount = 2;
+    public float maxCrystalCount = 6;
+    public int CrystalCount { get => Mathf.FloorToInt(Mathf.Lerp(minCrystalCount, maxCrystalCount, difficulty01)); }
+
+    public float minCrystalSeriesInterval = 10;
+    public float maxCrystalSeriesInterval = 4;
+    public float CrystalSeriesInterval { get => Mathf.Lerp(minCrystalSeriesInterval, maxCrystalSeriesInterval, difficulty01); }
+
     // Start is called before the first frame update
     void Awake()
     {
