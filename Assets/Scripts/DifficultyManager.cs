@@ -28,15 +28,18 @@ public class DifficultyManager : MonoBehaviour
     public float maxCrystalSeriesInterval = 4;
     public float CrystalSeriesInterval { get => Mathf.Lerp(minCrystalSeriesInterval, maxCrystalSeriesInterval, difficulty01); }
 
+    public float minCrystalShowningUpTime = 3;
+    public float maxCrystalShowningUpTime = 1;
+    public float CrystalShowningUpTime { get => Mathf.Lerp(minCrystalShowningUpTime, maxCrystalShowningUpTime, difficulty01); }
+
+    [Header("Monster")]
+    public float minMonsterSpawnTime = 10;
+    public float maxMonsterSpawnTime = 3;
+    public float MonsterSpawnTime { get => Mathf.Lerp(minMonsterSpawnTime, maxMonsterSpawnTime, difficulty01); }
+
     // Start is called before the first frame update
     void Awake()
     {
         Instance = this;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        print(difficulty01);
     }
 }

@@ -15,6 +15,9 @@ ModelImporter:
   - first:
       74: 5522812681064789136
     second: Run
+  - first:
+      74: 4348485665485846014
+    second: Death
   externalObjects: {}
   materials:
     materialImportMode: 1

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PickableIngredient : MonoBehaviour
 {
@@ -9,10 +10,13 @@ public class PickableIngredient : MonoBehaviour
     public float highlightOutlineWidth = 0.001f;
     public float outlineAnimSmooth = 0.05f;
     float refOutlineWidth = 0;
+    public int audioClipId;
 
     bool isHighlighted = false;
 
     public Ingredient ingredient;
+
+    public UnityEvent onIngredientPickedUp = new UnityEvent();
 
     Animator anim;
 
@@ -46,6 +50,8 @@ public class PickableIngredient : MonoBehaviour
     public Ingredient PlayerPickUp()
     {
         anim?.SetTrigger("PickUp");
+        SoundManager.PlaySound(audioClipId);
+        onIngredientPickedUp.Invoke();
         return ingredient;
     }
 }

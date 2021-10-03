@@ -12,10 +12,16 @@ public class MovementController : MonoBehaviour
     public float movementSmoothAirborn = 1f;
     public float moveSpeed = 3;
     public float moveSpeedAirborn = 1.5f;
+    public float rotationSpeed = 1;
 
     [Header("Grounded")]
+    public Transform groundTestRef = null;
     public LayerMask groundLayer = 0;
-    public bool IsGrounded { get; private set};
+    public bool IsGrounded { get; private set; }
+    public float groundTestLength = 0.6f;
+    public float heightDelta = 0.05f;
+    RaycastHit hitGround;
+    float lastJumpTime= -10;
 
     [Header("Gravity")]
     public float downwardAccelerationBonus = 1;
@@ -28,12 +34,15 @@ public class MovementController : MonoBehaviour
         Instance = this;
 
         rigidbody = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
-        inputs = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        if (GameManager.gameIsOver)
+            inputs = Vector2.zero;
+        else
+            inputs = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         GroundTest();
     }
 
@@ -64,7 +73,9 @@ public class MovementController : MonoBehaviour
 
         anim.SetFloat("MovementInput", Mathf.Abs(inputVector.magnitude));
 
-        if (rigidbody.velocity.y < 0)
+        GroundTest();
+
+        if (rigidbody.velocity.y < 0 && !IsGrounded)
         {
             rigidbody.AddForce(Vector3.down * downwardAccelerationBonus, ForceMode.Acceleration);
         }
@@ -72,23 +83,47 @@ public class MovementController : MonoBehaviour
 
     void GroundTest()
     {
-        RaycastHit hit;
-        IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.025f, Vector3.down, out hit, 0.05f, groundLayer);
+        IsGrounded = Physics.Raycast(groundTestRef.position, Vector3.down, out hitGround, groundTestLength, groundLayer);
+        if (IsGrounded && Time.time>lastJumpTime+2)
+        {
+            Vector3 pos = groundTestRef.position;
+            if (pos.y < hitGround.point.y + heightDelta)
+            {
+                pos.y = hitGround.point.y + heightDelta - groundTestRef.localPosition.y;
+                transform.position = pos;
+            }
+            print(hitGround.collider.name);
+        }
     }
 
     void UpdateFacingDirection()
     {
-        if (rigidbody.velocity.sqrMagnitude > 0.05f)
+        Vector3 velocity = rigidbody.velocity;
+        velocity.y = 0;
+        if (velocity.sqrMagnitude > 0.05f)
         {
-            Vector3 lookRotation = rigidbody.velocity;
+            Vector3 lookRotation = velocity;
             lookRotation.y = 0;
-            rigidbody.rotation = Quaternion.LookRotation(lookRotation);
+            Quaternion targetRot = Quaternion.LookRotation(lookRotation);
+            rigidbody.rotation = Quaternion.Slerp(rigidbody.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
     }
 
     public void Jump(float height)
     {
-        rigidbody.velocity = rigidbody.velocity * 0.5f;
+        Vector3 velocity = rigidbody.velocity;
+        velocity.y = 0;
+        velocity *= 0.5f;
+        rigidbody.velocity = velocity;
         rigidbody.AddForce(Vector3.up * height, ForceMode.VelocityChange);
+        lastJumpTime = Time.time;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(groundTestRef.position + Vector3.left * 0.02f, Vector3.down * groundTestLength);
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(groundTestRef.position+Vector3.left*0.01f, Vector3.down * heightDelta);
     }
 }

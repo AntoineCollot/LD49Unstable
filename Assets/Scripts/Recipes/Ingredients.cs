@@ -7,10 +7,19 @@ public enum Ingredient { Mushrooms, Exploroots, GodessTears, ToadSaliva, Crystal
 
 public static class Ingredients
 {
+    static Ingredient lastRandomIngredient = Ingredient.Crystal;
+
     public static Ingredient GetRandomIngredient()
     {
-        System.Array values = System.Enum.GetValues(typeof(Ingredient));
-        return (Ingredient)values.GetValue(Random.Range(0, values.Length));
+        Ingredient ingredient = lastRandomIngredient;
+        int i = 0;
+        while (ingredient == lastRandomIngredient && i<100)
+        {
+            System.Array values = System.Enum.GetValues(typeof(Ingredient));
+            ingredient = (Ingredient)values.GetValue(Random.Range(0, values.Length));
+            i++;
+        }
+        return ingredient;
     }
 
     [System.Serializable]

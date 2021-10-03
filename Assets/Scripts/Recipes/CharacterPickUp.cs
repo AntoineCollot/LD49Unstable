@@ -11,6 +11,7 @@ public class CharacterPickUp : MonoBehaviour
     [Header("Mushrooms")]
     public float bounceForce = 10;
 
+    public int IngredientPickedUpCount { get; private set; }
     public Ingredients.IngredientEvent onIngredientPickUp = new Ingredients.IngredientEvent();
 
     Animator anim;
@@ -43,6 +44,7 @@ public class CharacterPickUp : MonoBehaviour
         Ingredient ingredient = currentSelectedIngredient.PlayerPickUp();
         print(ingredient);
 
+        IngredientPickedUpCount++;
         onIngredientPickUp.Invoke(ingredient);
 
         switch (ingredient)
@@ -51,6 +53,7 @@ public class CharacterPickUp : MonoBehaviour
                 MovementController.Instance.Jump(bounceForce);
                 break;
             case Ingredient.Exploroots:
+                GetComponentInChildren<RootExplosion>().Explode();
                 break;
             case Ingredient.GodessTears:
                 break;
@@ -63,6 +66,7 @@ public class CharacterPickUp : MonoBehaviour
         }
 
         anim.SetTrigger("PickUp");
+        SoundManager.PlaySound(0);
     }
 
     void CastCollisions()

@@ -26,6 +26,9 @@ public class CrystalManager : MonoBehaviour
     {
         for (int i = 0; i < DifficultyManager.Instance.CrystalCount; i++)
         {
+            if (GameManager.gameIsOver)
+                yield break;
+
             if(MovementController.Instance.IsGrounded)
                 Instantiate(crystalPrefab, MovementController.Instance.transform.position, Quaternion.Euler(crystalPrefab.eulerAngles.x,Random.Range(0,360), crystalPrefab.eulerAngles.z), transform);
             yield return new WaitForSeconds(crystalInterval);

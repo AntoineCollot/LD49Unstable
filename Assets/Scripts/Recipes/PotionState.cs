@@ -9,6 +9,8 @@ public class PotionState : MonoBehaviour
     public List<IngredientRequest> requests = new List<IngredientRequest>();
     public Ingredients.IngredientEvent onNewRequest = new Ingredients.IngredientEvent();
 
+    public int CorrectIngredientPickedUp = 0;
+
     public static PotionState Instance;
     // Start is called before the first frame update
     void Awake()
@@ -24,6 +26,9 @@ public class PotionState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.gameIsOver)
+            return;
+
         instability01 += Time.deltaTime / DifficultyManager.Instance.InstabilityProgressTime;
 
         while(instability01>1)
@@ -43,7 +48,7 @@ public class PotionState : MonoBehaviour
 
             if (request.remainingTime01 < 0)
             {
-                print("GameOver");
+                GameManager.Instance.GameOver();
             }
         }
     }
@@ -65,6 +70,7 @@ public class PotionState : MonoBehaviour
         IngredientRequest request = new IngredientRequest(ingredient);
         requests.Add(request);
         onNewRequest.Invoke(ingredient);
+        SoundManager.PlaySound(8);
     }
 
     void OnIngredientPickUp(Ingredient ingredient)
@@ -74,7 +80,9 @@ public class PotionState : MonoBehaviour
         {
             if(request.ingredient== ingredient)
             {
+                CorrectIngredientPickedUp++;
                 requests.Remove(request);
+                SoundManager.PlaySound(9);
                 return;
             }
         }
