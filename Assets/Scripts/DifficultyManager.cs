@@ -8,7 +8,7 @@ public class DifficultyManager : MonoBehaviour
 
     [Header("Time")]
     public float maxTime;
-    public float difficulty01 { get => Mathf.Clamp01(Time.time / maxTime); }
+    public float difficulty01 { get => Mathf.Clamp01(Time.timeSinceLevelLoad / maxTime); }
 
     [Header("Potion")]
     public float minInstabilityProgressTime = 5;

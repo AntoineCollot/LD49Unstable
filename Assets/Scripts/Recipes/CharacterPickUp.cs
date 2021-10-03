@@ -67,6 +67,8 @@ public class CharacterPickUp : MonoBehaviour
 
         anim.SetTrigger("PickUp");
         SoundManager.PlaySound(0);
+
+        PickUpParticles.Instance.PickUpAnimation(currentSelectedIngredient.transform.position);
     }
 
     void CastCollisions()

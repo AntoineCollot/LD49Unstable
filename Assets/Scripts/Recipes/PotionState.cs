@@ -83,12 +83,14 @@ public class PotionState : MonoBehaviour
                 CorrectIngredientPickedUp++;
                 requests.Remove(request);
                 SoundManager.PlaySound(9);
+                PickUpParticles.Instance.SetCorrect(true);
                 return;
             }
         }
 
         //If not a good ingredient
         PickUpWrongIngredient();
+        PickUpParticles.Instance.SetCorrect(false);
     }
 
     public class IngredientRequest

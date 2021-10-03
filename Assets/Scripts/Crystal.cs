@@ -18,7 +18,7 @@ public class Crystal : MonoBehaviour
     {
         GetComponentInChildren<PickableIngredient>().onIngredientPickedUp.AddListener(OnIngredientPickedUp);
         StartCoroutine(SpawnAttack());
-        Destroy(gameObject, DifficultyManager.Instance.CrystalSeriesInterval + 1.5f);
+        Destroy(gameObject, DifficultyManager.Instance.CrystalSeriesInterval + 3f);
         ingredientCollider.enabled = false;
     }
 

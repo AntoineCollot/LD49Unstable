@@ -20,7 +20,7 @@ public class MovementController : MonoBehaviour
     public bool IsGrounded { get; private set; }
     public float groundTestLength = 0.6f;
     public float heightDelta = 0.05f;
-    RaycastHit hitGround;
+   //RaycastHit hitGround;
     float lastJumpTime= -10;
 
     [Header("Gravity")]
@@ -83,16 +83,26 @@ public class MovementController : MonoBehaviour
 
     void GroundTest()
     {
-        IsGrounded = Physics.Raycast(groundTestRef.position, Vector3.down, out hitGround, groundTestLength, groundLayer);
-        if (IsGrounded && Time.time>lastJumpTime+2)
+        RaycastHit hit;
+        if (Physics.OverlapSphere(groundTestRef.position, 0.03f, groundLayer).Length > 0)
         {
-            Vector3 pos = groundTestRef.position;
-            if (pos.y < hitGround.point.y + heightDelta)
+            Vector3 pos = transform.position;
+            pos.y = groundTestRef.position.y + heightDelta - groundTestRef.localPosition.y;
+            transform.position = pos;
+        }
+        else
+        {
+
+            IsGrounded = Physics.Raycast(groundTestRef.position, Vector3.down, out hit, groundTestLength, groundLayer);
+            if (IsGrounded && Time.time > lastJumpTime + 2)
             {
-                pos.y = hitGround.point.y + heightDelta - groundTestRef.localPosition.y;
-                transform.position = pos;
+                Vector3 pos = groundTestRef.position;
+                if (pos.y < hit.point.y + heightDelta)
+                {
+                    pos.y = hit.point.y + heightDelta - groundTestRef.localPosition.y;
+                    transform.position = pos;
+                }
             }
-            print(hitGround.collider.name);
         }
     }
 

@@ -19,6 +19,7 @@ public static class Ingredients
             ingredient = (Ingredient)values.GetValue(Random.Range(0, values.Length));
             i++;
         }
+        lastRandomIngredient = ingredient;
         return ingredient;
     }
 
